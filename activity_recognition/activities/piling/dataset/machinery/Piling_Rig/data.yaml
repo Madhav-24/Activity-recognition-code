@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['piling rig']
+
+roboflow:
+  workspace: shubharriya-m-p
+  project: piling_rig_detection
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/shubharriya-m-p/piling_rig_detection/dataset/1

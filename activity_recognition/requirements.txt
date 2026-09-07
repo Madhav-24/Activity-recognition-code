@@ -1,7 +1,11 @@
+# Purpose: Lists the Python packages required by the activity-recognition project.
+# Use: Install these dependencies before running the dashboards or inference pipelines.
+
 ultralytics
 opencv-python
 numpy
 pyyaml
 streamlit
+flask
 pillow
 pandas

@@ -1,3 +1,7 @@
+# Purpose: Implements the activity_recognition/activities/site_clearing/dashboard/app.py module.
+# Use: Provides the functions, classes, or application entry points used by this project.
+# Documentation: Comments below identify the responsibility of each logical function or class block.
+
 """Streamlit dashboard for the independent Site Clearing application."""
 
 import sys
@@ -43,6 +47,7 @@ with right:
     status = "SITE CLEARING DETECTED" if result["activity_detected"] else "SITE CLEARING NOT DETECTED"
     (st.success if result["activity_detected"] else st.warning)(status)
     st.subheader("Machinery detection")
+    # Logical block: defines the def normalize_label and controls its related behavior.
     def normalize_label(label):
         return "".join(character for character in label.lower() if character.isalnum())
 

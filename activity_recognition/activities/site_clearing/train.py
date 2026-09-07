@@ -1,3 +1,7 @@
+# Purpose: Implements the activity_recognition/activities/site_clearing/train.py module.
+# Use: Provides the functions, classes, or application entry points used by this project.
+# Documentation: Comments below identify the responsibility of each logical function or class block.
+
 """
 Training entry point for Site Clearing.
 
@@ -39,6 +43,7 @@ ROAD_LAYER_MODELS = (
 )
 
 
+# Logical block: defines the def main and controls its related behavior.
 def main():
 
     print("=" * 60)

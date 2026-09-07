@@ -1,3 +1,7 @@
+# Purpose: Implements the activity_recognition/activities/site_clearing/test.py module.
+# Use: Provides the functions, classes, or application entry points used by this project.
+# Documentation: Comments below identify the responsibility of each logical function or class block.
+
 """
 Testing entry point for Site Clearing.
 """
@@ -8,6 +12,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
 
+# Logical block: defines the def main and controls its related behavior.
 def main():
 
     print("=" * 60)

@@ -1,3 +1,7 @@
+# Purpose: Implements the activity_recognition/activities/prime_coat/dashboard/app.py module.
+# Use: Provides the functions, classes, or application entry points used by this project.
+# Documentation: Comments below identify the responsibility of each logical function or class block.
+
 import sys
 from pathlib import Path
 import cv2,numpy as np,streamlit as st

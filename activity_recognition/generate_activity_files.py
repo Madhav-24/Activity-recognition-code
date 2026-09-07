@@ -1,3 +1,7 @@
+# Purpose: Implements the activity_recognition/generate_activity_files.py module.
+# Use: Provides the functions, classes, or application entry points used by this project.
+# Documentation: Comments below identify the responsibility of each logical function or class block.
+
 from pathlib import Path
 import textwrap
 
@@ -217,6 +221,7 @@ ACTIVITIES = {
 # UTILITY
 # ============================================================
 
+# Logical block: defines the def write_file and controls its related behavior.
 def write_file(path: Path, content: str):
 
     path.parent.mkdir(
@@ -234,6 +239,7 @@ def write_file(path: Path, content: str):
 # FEATURE EXTRACTOR
 # ============================================================
 
+# Logical block: defines the def generate_feature_extractor and controls its related behavior.
 def generate_feature_extractor(activity):
 
     features = activity["features"]
@@ -254,6 +260,7 @@ def generate_feature_extractor(activity):
 
         functions += """
 
+        # Logical block: defines the def calculate_edge_density and controls its related behavior.
         def calculate_edge_density(image):
             \"\"\"
             Calculate edge density using Canny edge detection.
@@ -297,6 +304,7 @@ def generate_feature_extractor(activity):
 
         functions += """
 
+        # Logical block: defines the def calculate_texture_variance and controls its related behavior.
         def calculate_texture_variance(image):
             \"\"\"
             Calculate image texture variance.
@@ -329,6 +337,7 @@ def generate_feature_extractor(activity):
 
         functions += """
 
+        # Logical block: defines the def calculate_green_ratio and controls its related behavior.
         def calculate_green_ratio(image):
             \"\"\"
             Calculate the percentage of green pixels.
@@ -385,6 +394,7 @@ def generate_feature_extractor(activity):
 
         functions += """
 
+        # Logical block: defines the def calculate_center and controls its related behavior.
         def calculate_center(
             bbox
         ):
@@ -412,6 +422,7 @@ def generate_feature_extractor(activity):
             )
 
 
+        # Logical block: defines the def calculate_distance and controls its related behavior.
         def calculate_distance(
             bbox1,
             bbox2
@@ -438,6 +449,7 @@ def generate_feature_extractor(activity):
             )
 
 
+        # Logical block: defines the def calculate_machinery_proximity and controls its related behavior.
         def calculate_machinery_proximity(
             excavator_boxes,
             dump_truck_boxes,
@@ -521,6 +533,7 @@ def generate_feature_extractor(activity):
 
     functions += """
 
+        # Logical block: defines the def extract_features and controls its related behavior.
         def extract_features(image):
             \"\"\"
             Extract activity-specific visual features.
@@ -576,6 +589,7 @@ def generate_feature_extractor(activity):
 # RULE ENGINE
 # ============================================================
 
+# Logical block: defines the def generate_rule_engine and controls its related behavior.
 def generate_rule_engine(activity):
 
     machinery = activity["machinery"]
@@ -605,6 +619,7 @@ def generate_rule_engine(activity):
     FEATURES_USED = {features_code}
 
 
+    # Logical block: defines the def machinery_score and controls its related behavior.
     def machinery_score(
         detections,
         required_machinery=None
@@ -642,6 +657,7 @@ def generate_rule_engine(activity):
         return score
 
 
+    # Logical block: defines the def road_layer_score and controls its related behavior.
     def road_layer_score(
         detected_layer,
         confidence=1.0
@@ -663,6 +679,7 @@ def generate_rule_engine(activity):
         return 0.0
 
 
+    # Logical block: defines the def feature_score and controls its related behavior.
     def feature_score(
         features
     ):
@@ -749,6 +766,7 @@ def generate_rule_engine(activity):
         return score
 
 
+    # Logical block: defines the def calculate_activity_score and controls its related behavior.
     def calculate_activity_score(
         detections,
         detected_layer,
@@ -804,6 +822,7 @@ def generate_rule_engine(activity):
 # CONFIG.YAML
 # ============================================================
 
+# Logical block: defines the def generate_config and controls its related behavior.
 def generate_config(activity):
 
     machinery_yaml = "\n".join(
@@ -859,6 +878,7 @@ def generate_config(activity):
 # INFERENCE.PY
 # ============================================================
 
+# Logical block: defines the def generate_inference and controls its related behavior.
 def generate_inference(activity):
 
     return f"""
@@ -868,15 +888,15 @@ def generate_inference(activity):
     Pipeline:
 
         Image
-          ↓
+          â†“
         Machinery model
-          ↓
+          â†“
         Road-layer model
-          ↓
+          â†“
         Activity-specific features
-          ↓
+          â†“
         Rule engine
-          ↓
+          â†“
         Activity score
     \"\"\"
 
@@ -902,6 +922,7 @@ def generate_inference(activity):
     )
 
 
+    # Logical block: defines the def load_config and controls its related behavior.
     def load_config():
 
         with open(
@@ -913,6 +934,7 @@ def generate_inference(activity):
             return yaml.safe_load(f)
 
 
+    # Logical block: defines the def process_image and controls its related behavior.
     def process_image(
         image_path,
         machinery_detections,
@@ -992,6 +1014,7 @@ def generate_inference(activity):
 # TRAIN.PY
 # ============================================================
 
+# Logical block: defines the def generate_train and controls its related behavior.
 def generate_train(activity):
 
     return f"""
@@ -1036,6 +1059,7 @@ def generate_train(activity):
     )
 
 
+    # Logical block: defines the def main and controls its related behavior.
     def main():
 
         print("=" * 60)
@@ -1099,6 +1123,7 @@ def generate_train(activity):
 # TEST.PY
 # ============================================================
 
+# Logical block: defines the def generate_test and controls its related behavior.
 def generate_test(activity):
 
     return f"""
@@ -1112,6 +1137,7 @@ def generate_test(activity):
     BASE_DIR = Path(__file__).resolve().parent
 
 
+    # Logical block: defines the def main and controls its related behavior.
     def main():
 
         print("=" * 60)
@@ -1170,6 +1196,7 @@ def generate_test(activity):
 # README
 # ============================================================
 
+# Logical block: defines the def generate_readme and controls its related behavior.
 def generate_readme(activity):
 
     machinery = "\n".join(
@@ -1212,15 +1239,15 @@ def generate_readme(activity):
     ## Pipeline
 
     Image
-    ↓
+    â†“
     Machinery detection
-    ↓
+    â†“
     Road-layer detection
-    ↓
+    â†“
     Activity-specific feature extraction
-    ↓
+    â†“
     Rule engine
-    ↓
+    â†“
     Activity score
 
 
@@ -1229,15 +1256,15 @@ def generate_readme(activity):
     ```text
     {activity["display_name"].lower().replace(" ", "_")}/
 
-    ├── dataset/
-    ├── models/
-    ├── rules/
-    ├── features/
-    ├── config/
-    ├── inference.py
-    ├── train.py
-    ├── test.py
-    └── README.md
+    â”œâ”€â”€ dataset/
+    â”œâ”€â”€ models/
+    â”œâ”€â”€ rules/
+    â”œâ”€â”€ features/
+    â”œâ”€â”€ config/
+    â”œâ”€â”€ inference.py
+    â”œâ”€â”€ train.py
+    â”œâ”€â”€ test.py
+    â””â”€â”€ README.md
     ```
 
 
@@ -1255,6 +1282,7 @@ def generate_readme(activity):
 # CREATE COMMON FILES
 # ============================================================
 
+# Logical block: defines the def create_common_files and controls its related behavior.
 def create_common_files():
 
     common_dir = (
@@ -1273,6 +1301,7 @@ def create_common_files():
     import cv2
 
 
+    # Logical block: defines the def load_image and controls its related behavior.
     def load_image(path):
 
         image = cv2.imread(
@@ -1292,8 +1321,10 @@ def create_common_files():
     from collections import deque
 
 
+    # Logical block: defines the class TemporalBuffer and controls its related behavior.
     class TemporalBuffer:
 
+        # Logical block: defines the def __init__ and controls its related behavior.
         def __init__(
             self,
             max_length=10
@@ -1304,6 +1335,7 @@ def create_common_files():
             )
 
 
+        # Logical block: defines the def add and controls its related behavior.
         def add(self, value):
 
             self.buffer.append(
@@ -1311,6 +1343,7 @@ def create_common_files():
             )
 
 
+        # Logical block: defines the def get and controls its related behavior.
         def get(self):
 
             return list(
@@ -1318,11 +1351,13 @@ def create_common_files():
             )
 
 
+        # Logical block: defines the def clear and controls its related behavior.
         def clear(self):
 
             self.buffer.clear()
 
 
+        # Logical block: defines the def average and controls its related behavior.
         def average(self):
 
             values = self.get()
@@ -1351,6 +1386,7 @@ def create_common_files():
 # CREATE ACTIVITY FILES
 # ============================================================
 
+# Logical block: defines the def create_activity and controls its related behavior.
 def create_activity(activity_name, activity):
 
     activity_dir = (
@@ -1496,31 +1532,31 @@ def create_activity(activity_name, activity):
 
 
     print(
-        "  ✓ rules/activity_rules.py"
+        "  âœ“ rules/activity_rules.py"
     )
 
     print(
-        "  ✓ features/feature_extractor.py"
+        "  âœ“ features/feature_extractor.py"
     )
 
     print(
-        "  ✓ config/config.yaml"
+        "  âœ“ config/config.yaml"
     )
 
     print(
-        "  ✓ inference.py"
+        "  âœ“ inference.py"
     )
 
     print(
-        "  ✓ train.py"
+        "  âœ“ train.py"
     )
 
     print(
-        "  ✓ test.py"
+        "  âœ“ test.py"
     )
 
     print(
-        "  ✓ README.md"
+        "  âœ“ README.md"
     )
 
 
@@ -1528,6 +1564,7 @@ def create_activity(activity_name, activity):
 # MAIN
 # ============================================================
 
+# Logical block: defines the def main and controls its related behavior.
 def main():
 
     print("\n")
@@ -1585,11 +1622,11 @@ def main():
 
 
     print(
-        "  ✓ src/common/image_utils.py"
+        "  âœ“ src/common/image_utils.py"
     )
 
     print(
-        "  ✓ src/common/temporal.py"
+        "  âœ“ src/common/temporal.py"
     )
 
 
@@ -1628,7 +1665,7 @@ def main():
     for activity_name, activity in ACTIVITIES.items():
 
         print(
-            f"  ✓ {activity_name}"
+            f"  âœ“ {activity_name}"
         )
 
 

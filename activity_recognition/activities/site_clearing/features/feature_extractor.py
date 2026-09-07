@@ -1,3 +1,7 @@
+# Purpose: Implements the activity_recognition/activities/site_clearing/features/feature_extractor.py module.
+# Use: Provides the functions, classes, or application entry points used by this project.
+# Documentation: Comments below identify the responsibility of each logical function or class block.
+
 import cv2
 import numpy as np
 
@@ -6,6 +10,7 @@ import numpy as np
 # EDGE DENSITY
 # ============================================================
 
+# Logical block: defines the def calculate_edge_density and controls its related behavior.
 def calculate_edge_density(image):
     """
     Calculate edge density using Canny edge detection.
@@ -44,6 +49,7 @@ def calculate_edge_density(image):
 # TEXTURE VARIANCE
 # ============================================================
 
+# Logical block: defines the def calculate_texture_variance and controls its related behavior.
 def calculate_texture_variance(image):
     """
     Calculate grayscale intensity variance.
@@ -72,6 +78,7 @@ def calculate_texture_variance(image):
 # GREEN RATIO
 # ============================================================
 
+# Logical block: defines the def calculate_green_ratio and controls its related behavior.
 def calculate_green_ratio(image):
     """
     Calculate the ratio of green pixels in the image.
@@ -126,6 +133,7 @@ def calculate_green_ratio(image):
 # FEATURE EXTRACTION
 # ============================================================
 
+# Logical block: defines the def extract_features and controls its related behavior.
 def extract_features(
     image,
     enabled_features=None

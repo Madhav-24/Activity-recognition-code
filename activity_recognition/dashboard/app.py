@@ -1,3 +1,7 @@
+# Purpose: Implements the activity_recognition/dashboard/app.py module.
+# Use: Provides the functions, classes, or application entry points used by this project.
+# Documentation: Comments below identify the responsibility of each logical function or class block.
+
 """Unified dashboard for all independent road-construction activity pipelines."""
 
 from __future__ import annotations
@@ -23,12 +27,10 @@ ACTIVITIES = [
     ("gsb_laying", "GSB Laying"),
     ("wmm_laying", "WMM Laying"),
     ("asphalt_paving", "Asphalt Paving"),
-    ("prime_coat", "Prime Coat"),
-    ("tack_coat", "Tack Coat"),
-    ("piling", "Piling"),
 ]
 
 
+# Logical block: defines the def _load_activity_module and controls its related behavior.
 def _load_activity_module(activity_id: str) -> ModuleType:
     """Load one activity's inference module with its local feature/rule imports."""
     activity_root = PROJECT_ROOT / "activities" / activity_id
@@ -48,6 +50,7 @@ def _load_activity_module(activity_id: str) -> ModuleType:
         sys.path.remove(str(activity_root))
 
 
+# Logical block: defines the def analyze_all and controls its related behavior.
 def analyze_all(image: np.ndarray) -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
     results = []
     errors = []
@@ -63,6 +66,7 @@ def analyze_all(image: np.ndarray) -> tuple[list[dict[str, Any]], list[dict[str,
     return results, errors
 
 
+# Logical block: defines the def score_table and controls its related behavior.
 def score_table(results: list[dict[str, Any]]) -> pd.DataFrame:
     rows = []
     for result in results:
@@ -76,6 +80,7 @@ def score_table(results: list[dict[str, Any]]) -> pd.DataFrame:
     return pd.DataFrame(rows).sort_values("Total Score", ascending=False).reset_index(drop=True)
 
 
+# Logical block: defines the def _feature_cards and controls its related behavior.
 def _feature_cards(features: dict[str, Any]) -> None:
     columns = st.columns(min(max(len(features), 1), 4))
     for column, (name, value) in zip(columns, features.items()):
@@ -106,7 +111,7 @@ if not analyze:
     st.stop()
 
 image_bgr = cv2.cvtColor(np.asarray(preview), cv2.COLOR_RGB2BGR)
-with st.spinner("Running all 10 activity pipelines..."):
+with st.spinner("Running all 7 activity pipelines..."):
     activity_results, activity_errors = analyze_all(image_bgr)
 
 if not activity_results:

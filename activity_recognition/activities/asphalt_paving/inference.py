@@ -34,7 +34,7 @@ def _norm(v): return ''.join(c for c in v.lower() if c.isalnum())
 def detect_machinery(model,image,c):
  r=_predict(model,image,c)
  if not r or r[0].boxes is None:return []
- b=r[0].boxes; names=_names(model); return [{'name':names[int(k)],'confidence':float(q),'box':[float(x) for x in box]} for box,q,k in zip(b.xyxy.cpu().numpy(),b.conf.cpu().numpy(),b.cls.cpu().numpy())]
+ b=r[0].boxes; names=_names(model); allowed={_norm(name) for name in c['machinery']}; return [{'name':names[int(k)],'confidence':float(q),'box':[float(x) for x in box]} for box,q,k in zip(b.xyxy.cpu().numpy(),b.conf.cpu().numpy(),b.cls.cpu().numpy()) if _norm(names[int(k)]) in allowed]
 # Logical block: defines the def summarize_machinery and controls its related behavior.
 def summarize_machinery(detections,required): return {n:max((d['confidence'] for d in detections if _norm(d['name'])==_norm(n)),default=0.0) for n in required}
 # Logical block: defines the def detect_road_layer and controls its related behavior.

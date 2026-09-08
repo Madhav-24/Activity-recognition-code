@@ -4,7 +4,6 @@ activity:
 machinery:
 - Grader
 - Roller
-- Bulldozer
 road_layer:
   required: Soil
 features:

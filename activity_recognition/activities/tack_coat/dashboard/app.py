@@ -1,25 +1,80 @@
-# Purpose: Implements the activity_recognition/activities/tack_coat/dashboard/app.py module.
-# Use: Provides the functions, classes, or application entry points used by this project.
-# Documentation: Comments below identify the responsibility of each logical function or class block.
+"""Purpose: Standalone Streamlit dashboard for Tack Coat recognition.
+Use: Upload an image, run the local Tack Coat computer-vision pipeline, and review its results.
+"""
+
+from __future__ import annotations
 
 import sys
 from pathlib import Path
-import cv2,numpy as np,streamlit as st
+
+import cv2
+import numpy as np
+import pandas as pd
+import streamlit as st
 from PIL import Image
-ROOT=Path(__file__).resolve().parents[1]; sys.path.insert(0,str(ROOT))
-from inference import load_config,run_inference
-c=load_config(); st.set_page_config(page_title=c['activity']['name'],layout='wide')
-uploaded=st.file_uploader('Upload image',type=['jpg','jpeg','png','bmp'])
-if uploaded is None: st.info('Choose an image to begin inference.'); st.stop()
+
+ACTIVITY_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ACTIVITY_ROOT))
+from inference import run_inference  # noqa: E402
+
+st.set_page_config(page_title="Tack Coat Activity Recognition", page_icon="L&T", layout="wide")
+st.title("L&T | TACK COAT ACTIVITY RECOGNITION")
+st.caption("Standalone computer-vision analysis for Tack Coat work")
+st.divider()
+
+uploaded = st.file_uploader("Upload a road-construction image", type=["jpg", "jpeg", "png"])
+if uploaded is None:
+    st.info("Upload a Tack Coat image to begin analysis.")
+    st.stop()
+
 try:
- original=Image.open(uploaded).convert('RGB'); result=run_inference(cv2.cvtColor(np.array(original),cv2.COLOR_RGB2BGR))
-except Exception as error: st.error(f'Inference failed: {error}'); st.stop()
-a,b=st.columns(2)
-with a: st.image(original,caption='Original image',use_container_width=True); st.image(cv2.cvtColor(result['processed_image'],cv2.COLOR_BGR2RGB),caption='Processed image',use_container_width=True)
-with b:
- activity_name = result['activity'].upper()
- st.metric('Activity score',f"{result['normalized_score']:.1%}"); (st.success if result['activity_detected'] else st.warning)(f"{activity_name} DETECTED" if result['activity_detected'] else f"{activity_name} NOT DETECTED")
- st.subheader('Machinery'); st.dataframe([{'Machinery':n,'Confidence':f'{v:.2f}','Count':sum(''.join(c for c in d['name'].lower() if c.isalnum())==''.join(c for c in n.lower() if c.isalnum()) for d in result['detections'])} for n,v in result['machinery'].items()],hide_index=True,use_container_width=True)
- st.subheader('Road layer'); st.write(f"Detected: **{result['road_layer']['detected'] or 'None'}**"); st.write(f"Confidence: **{result['road_layer']['confidence']:.2f}**")
-st.subheader('Features'); st.dataframe([{'Feature':n.replace('_',' ').title(),'Value':f'{v:.4f}'} for n,v in result['features'].items()],hide_index=True,use_container_width=True)
-st.subheader('Score components'); st.dataframe([{'Component':n,'Score':f'{result[k]:.3f}'} for n,k in [('Machinery','machinery_score'),('Road layer','road_layer_score'),('Features','feature_score'),('Total','total_score')]],hide_index=True,use_container_width=True)
+    preview = Image.open(uploaded).convert("RGB")
+except Exception as error:
+    st.error(f"Invalid image: {error}")
+    st.stop()
+
+left, right = st.columns(2)
+with left:
+    st.subheader("Original image")
+    st.image(preview, use_container_width=True)
+with right:
+    st.subheader("Analysis")
+    analyze = st.button("Analyze Image", type="primary", use_container_width=True)
+    st.caption("Required road layer: Asphalt | Machinery: Bitumen Sprayer")
+
+if not analyze:
+    st.stop()
+
+image_bgr = cv2.cvtColor(np.asarray(preview), cv2.COLOR_RGB2BGR)
+with st.spinner("Running Tack Coat models..."):
+    try:
+        result = run_inference(image_bgr)
+    except Exception as error:
+        st.error(f"Analysis failed: {error}")
+        st.stop()
+
+score = float(result.get("normalized_score", result.get("total_score", 0.0)))
+st.success(f"DETECTED ACTIVITY: {result.get('activity', 'Tack Coat')}")
+st.metric("Confidence / Activity Score", f"{score:.3f}")
+
+st.subheader("Analyzed image")
+st.image(cv2.cvtColor(result["processed_image"], cv2.COLOR_BGR2RGB), use_container_width=True)
+
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("Machinery detections")
+    st.dataframe(pd.DataFrame([{"Machinery": name, "Confidence": f"{confidence:.3f}"} for name, confidence in result.get("machinery", {}).items()]), hide_index=True, use_container_width=True)
+with col2:
+    st.subheader("Road layer detection")
+    st.metric("Detected layer", result.get("road_layer", {}).get("detected") or "None")
+    st.metric("Confidence", f"{result.get('road_layer', {}).get('confidence', 0.0):.3f}")
+
+st.subheader("Visual indicators")
+feature_columns = st.columns(max(1, min(4, len(result.get("features", {})))))
+for column, (name, value) in zip(feature_columns, result.get("features", {}).items()):
+    column.metric(name.replace("_", " ").title(), f"{value:.4f}")
+
+st.subheader("Score components")
+score_columns = st.columns(4)
+for column, label, key in zip(score_columns, ("Machinery", "Road Layer", "Features", "Total"), ("machinery_score", "road_layer_score", "feature_score", "total_score")):
+    column.metric(label, f"{result.get(key, 0.0):.3f}")

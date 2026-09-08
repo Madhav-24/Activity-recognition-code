@@ -79,6 +79,7 @@ def detect_machinery(model: YOLO, image: np.ndarray, config: dict) -> list[dict]
         return []
     boxes = results[0].boxes
     names = _names(model)
+    allowed = {_normalise(name) for name in config["machinery"]}
     return [
         {"name": names[int(class_id)], "confidence": float(confidence), "box": [float(value) for value in box]}
         for box, confidence, class_id in zip(
@@ -86,6 +87,7 @@ def detect_machinery(model: YOLO, image: np.ndarray, config: dict) -> list[dict]
             boxes.conf.cpu().numpy(),
             boxes.cls.cpu().numpy(),
         )
+        if _normalise(names[int(class_id)]) in allowed
     ]
 
 

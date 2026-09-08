@@ -21,10 +21,7 @@ def _normalized(label):
 
 # Logical block: defines the def special_score and controls its related behavior.
 def special_score(detections,detected_layer,layer_confidence,features,required_layer):
- confidences={}
- for detection in detections:
-    label=_normalized(detection['name'])
-    confidences[label]=max(confidences.get(label,0.0),float(detection['confidence']))
+ confidences={_normalized(name):_bound(confidence) for name, confidence in detections.items()}
  indicators=[road_layer_score(detected_layer,layer_confidence,required_layer),_bound(confidences.get('roller',0.0)),_bound(confidences.get('asphaltpaver',0.0)),_bound(features.get('surface_uniformity',0.0)),max(0.0,1.0-min(float(features.get('edge_density',1.0))/0.30,1.0))]
  return sum(indicators)/len(indicators)
 

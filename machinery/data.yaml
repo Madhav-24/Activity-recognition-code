@@ -1,0 +1,13 @@
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 8
+names: ['Bull_Dozer', 'Dump_Truck', 'Excavator', 'Grader', 'Loader', 'Mixer', 'Mobile_crane', 'Roller']
+
+roboflow:
+  workspace: tharuns-workspace-1vllb
+  project: construction-vehicle-detection-pxc7c-pntl6
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/tharuns-workspace-1vllb/construction-vehicle-detection-pxc7c-pntl6/dataset/1

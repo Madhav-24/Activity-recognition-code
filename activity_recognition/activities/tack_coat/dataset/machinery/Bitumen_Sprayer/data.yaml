@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['Bitumen-Sprayer']
+
+roboflow:
+  workspace: shubharriya-m-p
+  project: bitumen-sprayer-esayq
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/shubharriya-m-p/bitumen-sprayer-esayq/dataset/1

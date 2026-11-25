@@ -1,0 +1,38 @@
+activity:
+  name: "Site Clearing"
+  id: "site_clearing"
+
+machinery:
+  - Bulldozer
+  - Excavator
+  - Loader
+
+road_layer:
+  required: "Soil"
+  mismatch_penalty: 0.0
+
+features:
+  - edge_density
+  - texture_variance
+  - green_ratio
+
+inference:
+  confidence_threshold: 0.40
+  image_size: 640
+
+scoring:
+  machinery_weight: 3.0
+  road_layer_weight: 3.0
+  feature_weight: 1.0
+  detection_threshold: 0.35
+  feature_normalization:
+    edge_density_max: 0.30
+    texture_variance_max: 5000.0
+
+temporal:
+  enabled: true
+  window_size: 10
+
+output:
+  save_results: true
+  save_json: true

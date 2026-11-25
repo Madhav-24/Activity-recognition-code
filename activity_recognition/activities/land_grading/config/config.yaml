@@ -1,0 +1,25 @@
+activity:
+  name: Land Grading
+  id: land_grading
+machinery:
+- Grader
+- Bulldozer
+- Roller
+road_layer:
+  required: Soil
+features:
+- edge_density
+- texture_variance
+inference:
+  confidence_threshold: 0.4
+  image_size: 640
+scoring:
+  machinery_weight: 3.0
+  road_layer_weight: 3.0
+  feature_weight: 1.0
+  detection_threshold: 0.35
+  feature_normalization:
+    edge_density_max: 0.3
+    texture_variance_max: 5000.0
+output:
+  save_results: true
